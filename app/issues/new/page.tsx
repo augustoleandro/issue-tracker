@@ -22,28 +22,29 @@ function NewIssuePage() {
   const [error, setError] = useState<String | undefined>();
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      setIsSubmitting(true)
+      const response = await fetch('/api/issues', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      })
+      if (!response.ok) throw await response.json();
+      router.push('/issues')
+    } catch (error) {
+      setIsSubmitting(false)
+      console.log(error)
+      setError('An unexpected error occurred.')
+    }
+  })
+
   return (
     <div className='max-w-lg '>
       {error &&
         <Callout.Root color='red' className='mb-5'>
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>}
-      <form className='space-y-3' onSubmit={handleSubmit(async (data) => {
-        try {
-          setIsSubmitting(true)
-          const response = await fetch('/api/issues', {
-            method: 'POST',
-            body: JSON.stringify(data)
-          })
-          if (!response.ok) throw await response.json();
-          router.push('/issues')
-        } catch (error) {
-          setIsSubmitting(false)
-          console.log(error)
-          setError('An unexpected error occurred.')
-        }
-
-      })}>
+      <form className='space-y-3' onSubmit={onSubmit}>
         <TextField.Root>
           <TextField.Input placeholder='Title' {...register('title')} />
         </TextField.Root>
