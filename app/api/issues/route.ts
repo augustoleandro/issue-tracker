@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  console.log(req)
   const body = await req.json();
   const validation = createIssueSchema.safeParse(body);
 
