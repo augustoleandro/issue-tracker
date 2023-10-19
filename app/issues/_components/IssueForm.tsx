@@ -25,13 +25,25 @@ function IssueForm({ issue }: { issue?: Issue }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsSubmitting(true)
-      const response = await fetch('/api/issues', {
-        method: 'POST',
-        body: JSON.stringify(data)
-      })
-      if (!response.ok) throw await response.json();
+      let response: Response | null = null;
+      if (issue) {
+        response = await fetch(`/api/issues/${issue.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(data)
+        })
+      } else {
+        response = await fetch('/api/issues', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        })
+      }
+      if (!response || !response.ok) throw await response?.json();
       router.push('/issues')
-    } catch (error) {
+      router.refresh()
+
+    }
+
+    catch (error) {
       setIsSubmitting(false)
       console.log(error)
       setError('An unexpected error occurred.')
@@ -61,7 +73,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
         <Button disabled={isSubmitting}>
-          Submit New Issue
+          {issue ? "Update Issue" : "Submit New Issue"}{' '}
           {isSubmitting && <Spinner />}
         </Button>
       </form>
