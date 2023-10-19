@@ -46,7 +46,6 @@ function IssueForm({ issue }: { issue?: Issue }) {
 
     catch (error) {
       setIsSubmitting(false)
-      console.log(error)
       setError('An unexpected error occurred.')
     }
   })
