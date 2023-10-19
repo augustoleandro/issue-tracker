@@ -1,11 +1,23 @@
 "use client"
 
+import { useRouter } from 'next/navigation'
+
 import { TrashIcon } from '@radix-ui/react-icons'
-import { AlertDialog, AlertDialogTrigger, Button, Flex, Link } from '@radix-ui/themes'
+import { AlertDialog, Button, Flex, Link } from '@radix-ui/themes'
 
 function DeleteIssueButton({ issueId }: { issueId: number }) {
+  const router = useRouter()
+
+  async function deleteIssue() {
+    const response = await fetch(`/api/issues/${issueId}`, { method: 'DELETE' })
+    if (response.ok) {
+      router.push('/issues')
+      router.refresh()
+    }
+  }
+
   return (
-    <Link href="" className='flex justify-center'>
+    <div className='flex justify-center'>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
           <Button color="red" className='w-full max-w-md'>
@@ -23,12 +35,12 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
               <Button variant='soft' color="gray">Cancel</Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action>
-              <Button color="red">Delete</Button>
+              <Button color="red" onClick={deleteIssue}>Delete</Button>
             </AlertDialog.Action>
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
-    </Link>
+    </div>
   )
 }
 
