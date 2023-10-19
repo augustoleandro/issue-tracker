@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Issue } from '@prisma/client';
 import { Button, Callout, TextField } from '@radix-ui/themes';
 import "easymde/dist/easymde.min.css";
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -72,10 +73,18 @@ function IssueForm({ issue }: { issue?: Issue }) {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button disabled={isSubmitting}>
-          {issue ? "Update Issue" : "Submit New Issue"}{' '}
-          {isSubmitting && <Spinner />}
-        </Button>
+        <div className='flex justify-between'>
+          <Button disabled={isSubmitting}>
+            {issue ? "Update Issue" : "Submit New Issue"}{' '}
+            {isSubmitting && <Spinner />}
+          </Button>
+          <Link href='/issues'>
+            <Button color='red' disabled={isSubmitting}>
+              Cancel
+            </Button>
+          </Link>
+        </div>
+
       </form>
     </div>
   )
