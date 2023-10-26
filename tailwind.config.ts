@@ -17,6 +17,10 @@ const config: Config = {
   },
   plugins: [
     require('@tailwindcss/typography'),
+    require('postcss-import'),
+    require('tailwindcss/nesting')(require('postcss-nesting')),
+    require('autoprefixer'),
+    require('tailwindcss'),
   ],
 }
 export default config
