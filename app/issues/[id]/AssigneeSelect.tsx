@@ -2,19 +2,25 @@
 
 import { User } from '@prisma/client'
 import { Select } from '@radix-ui/themes'
+import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
+import { Skeleton } from '@/app/components'
 
 function AssigneeSelect() {
-  const [users, setUsers] = useState<User[]>()
+  const { data: users, error, isLoading } = useQuery<User[]>({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const response = await fetch('/api/users');
+      const data = await response.json();
+      return data;
+    },
+    staleTime: 60 * 1000,
+    retry: 3,
+  })
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch('/api/users')
-      setUsers(await response.json())
-    }
+  if (isLoading) return <Skeleton />
 
-    fetchUsers()
-  }, [])
+  if (error) return null
 
   return (
     <Select.Root>
