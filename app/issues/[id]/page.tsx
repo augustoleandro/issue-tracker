@@ -30,7 +30,7 @@ async function IssueDetailPage({ params }: IssueDetailPageProps) {
       </Box>
       {session && <Box>
         <div className="flex flex-col gap-2 mx-auto">
-          <AssigneeSelect />
+          <AssigneeSelect issue={issue} />
           <EditIssueButton issueId={issue.id} />
           <DeleteIssueButton issueId={issue.id} />
         </div>
